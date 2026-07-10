@@ -166,7 +166,7 @@ git clone https://github.com/peter-stefanski/WebServices-API-Testing.git
 Navigate to the project directory:
 
 ```bash
-cd WebServices-API-Testing
+cd Project
 ```
 
 Install dependencies:
@@ -194,7 +194,7 @@ npx playwright test
 Run only the booking API test:
 
 ```bash
-npx playwright test Project/e2e/booking-api.spec.js
+npx playwright test Project/e2e/bookingApi.spec.js
 ```
 
 Run tests with the HTML report:
