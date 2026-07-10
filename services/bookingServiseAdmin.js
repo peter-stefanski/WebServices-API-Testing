@@ -1,10 +1,9 @@
 import assert from "node:assert";
-import { test } from "@playwright/test";
 
-test("API Tests", async () => {
-  const BASE_URL = "https://restful-booker.herokuapp.com";
+const BASE_URL = "https://restful-booker.herokuapp.com";
 
-  async function createToken() {
+export default class BookingServicesAdmin {
+  async CreateToken() {
     const response = await fetch(`${BASE_URL}/auth`, {
       method: "POST",
       headers: {
@@ -28,7 +27,7 @@ test("API Tests", async () => {
     return data.token;
   }
 
-  async function createBooking() {
+  async CreateBooking() {
     const response = await fetch(`${BASE_URL}/booking`, {
       method: "POST",
       headers: {
@@ -55,13 +54,11 @@ test("API Tests", async () => {
     const data = await response.json();
 
     assert.ok(data.bookingid);
-    assert.strictEqual(data.booking.firstname, "John");
-    assert.strictEqual(data.booking.lastname, "Smith");
 
     return data.bookingid;
   }
 
-  async function getBooking(bookingId) {
+  async GetBooking(bookingId) {
     const response = await fetch(`${BASE_URL}/booking/${bookingId}`);
 
     assert.strictEqual(response.status, 200);
@@ -71,13 +68,10 @@ test("API Tests", async () => {
 
     const data = await response.json();
 
-    assert.strictEqual(data.firstname, "John");
-    assert.strictEqual(data.lastname, "Smith");
-
     return data;
   }
 
-  async function updateBooking(bookingId, token) {
+  async UpdateBooking(bookingId, token) {
     const response = await fetch(`${BASE_URL}/booking/${bookingId}`, {
       method: "PUT",
       headers: {
@@ -98,19 +92,13 @@ test("API Tests", async () => {
     });
 
     assert.strictEqual(response.status, 200);
-    assert.ok(
-      response.headers.get("content-type").includes("application/json"),
-    );
 
     const data = await response.json();
-
-    assert.strictEqual(data.firstname, "JohnUpdated");
-    assert.strictEqual(data.lastname, "SmithUpdated");
 
     return data;
   }
 
-  async function deleteBooking(bookingId, token) {
+  async DeleteBooking(bookingId, token) {
     const response = await fetch(`${BASE_URL}/booking/${bookingId}`, {
       method: "DELETE",
       headers: {
@@ -120,57 +108,6 @@ test("API Tests", async () => {
 
     assert.strictEqual(response.status, 201);
 
-    const data = await response.text();
-
-    assert.strictEqual(data, "Created");
-
     return true;
   }
-  //.....................................................................
-
-  // Atomic tests
-
-  await test.step("Scenario 1 - Create Booking", async () => {
-    const bookingId = await createBooking();
-
-    assert.ok(bookingId);
-
-    console.log("Create Booking passed");
-  });
-
-  await test.step("Scenario 2 - Get Booking", async () => {
-    const bookingId = await createBooking();
-
-    const booking = await getBooking(bookingId);
-
-    assert.strictEqual(booking.firstname, "John");
-    assert.strictEqual(booking.lastname, "Smith");
-
-    console.log("Get Booking passed");
-  });
-
-  await test.step("Scenario 3 - Update Booking", async () => {
-    const token = await createToken();
-
-    const bookingId = await createBooking();
-
-    const updatedBooking = await updateBooking(bookingId, token);
-
-    assert.strictEqual(updatedBooking.firstname, "JohnUpdated");
-    assert.strictEqual(updatedBooking.lastname, "SmithUpdated");
-
-    console.log("Update Booking passed");
-  });
-
-  await test.step("Scenario 4 - Delete Booking", async () => {
-    const token = await createToken();
-
-    const bookingId = await createBooking();
-
-    const deleted = await deleteBooking(bookingId, token);
-
-    assert.strictEqual(deleted, true);
-
-    console.log("Delete Booking passed");
-  });
-});
+}
