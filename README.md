@@ -1,12 +1,20 @@
-# Testing Web Services - Restful Booker API Tests
+# Testing Web Services - Restful Booker API Tests (Playwright)
 
 ## Project Description
 
-This project contains API automation tests for the Restful Booker web service.
+This project contains automated API tests for the Restful Booker web service using Playwright.
 
-The API requests were initially tested and debugged using Postman. After validation, the scenarios were implemented in JavaScript using the native Fetch API.
+The API requests were initially explored, tested, and debugged using Postman. After validating the endpoints, the complete booking workflow was automated with the Playwright Test Runner.
 
-The purpose of this project is to verify REST API functionality by testing authentication, booking creation, retrieving, updating and deleting bookings.
+The project follows the **Atomic Test Design** approach, where each logical step of the API workflow is organized into reusable methods, improving readability, maintainability, and scalability.
+
+The purpose of this project is to verify the complete REST API booking lifecycle, including:
+
+- Authentication
+- Booking creation
+- Retrieving booking details
+- Updating booking information
+- Deleting bookings
 
 ---
 
@@ -14,8 +22,9 @@ The purpose of this project is to verify REST API functionality by testing authe
 
 - JavaScript (ES Modules)
 - Node.js
-- Native Fetch API
-- Node.js Assert module
+- Playwright Test
+- Playwright APIRequestContext
+- Atomic Test Design
 - Postman (API request validation and debugging)
 
 ---
@@ -32,7 +41,9 @@ https://restful-booker.herokuapp.com/apidoc/index.html
 
 ---
 
-## Test Scenarios
+## Test Scenario
+
+The automated test covers the complete booking workflow.
 
 ### 1. Create Authentication Token
 
@@ -44,13 +55,13 @@ POST /auth
 
 **Purpose**
 
-Generate authentication token required for authorized requests.
+Generate an authentication token required for authorized requests.
 
 **Assertions**
 
 - Response status code
 - Response headers
-- Token existence in response body
+- Authentication token exists
 
 ---
 
@@ -64,18 +75,18 @@ POST /booking
 
 **Purpose**
 
-Create a new booking and save the generated booking ID for further API requests.
+Create a new booking and save the generated booking ID for further requests.
 
 **Assertions**
 
 - Response status code
 - Response headers
-- Booking ID existence
-- Booking data validation
+- Booking ID exists
+- Booking data is correct
 
 ---
 
-### 3. Get Booking By ID
+### 3. Get Booking
 
 **Endpoint**
 
@@ -85,13 +96,13 @@ GET /booking/{id}
 
 **Purpose**
 
-Retrieve booking details using the booking ID created during the booking creation scenario.
+Retrieve the booking created in the previous step.
 
 **Assertions**
 
 - Response status code
 - Response headers
-- Booking details validation
+- Booking data matches the created booking
 
 ---
 
@@ -105,13 +116,13 @@ PUT /booking/{id}
 
 **Purpose**
 
-Update existing booking information using the authentication token generated during login.
+Update the booking using the authentication token.
 
 **Assertions**
 
 - Response status code
 - Response headers
-- Updated booking data validation
+- Updated booking data is returned correctly
 
 ---
 
@@ -125,28 +136,37 @@ DELETE /booking/{id}
 
 **Purpose**
 
-Delete an existing booking and verify successful removal.
+Delete the booking and verify successful deletion.
 
 **Assertions**
 
 - Response status code
-- Response body
+- Successful deletion response
 
+---
+
+## Test File
+
+The main automated test is located at:
+
+```
+Project/e2e/booking-api.spec.js
+```
 
 ---
 
 ## Installation
 
-Clone repository:
+Clone the repository:
 
 ```bash
-git clone https://github.com/peter-stefanski/WebServices-API-Testing
+git clone https://github.com/peter-stefanski/WebServices-API-Testing.git
 ```
 
-Navigate to the project folder:
+Navigate to the project directory:
 
 ```bash
-cd Project
+cd WebServices-API-Testing
 ```
 
 Install dependencies:
@@ -155,31 +175,63 @@ Install dependencies:
 npm install
 ```
 
+Install Playwright browsers:
+
+```bash
+npx playwright install
+```
+
 ---
 
 ## Running Tests
 
-Run API tests with:
+Run all Playwright tests:
 
 ```bash
-npm test
+npx playwright test
+```
+
+Run only the booking API test:
+
+```bash
+npx playwright test Project/e2e/booking-api.spec.js
+```
+
+Run tests with the HTML report:
+
+```bash
+npx playwright test --reporter=html
+```
+
+Open the generated report:
+
+```bash
+npx playwright show-report
 ```
 
 ---
 
 ## Test Execution Flow
 
-The complete API test flow:
+The automated test performs the following sequence:
 
 ```
-1. Create Authentication Token 
-          
+1. Create Authentication Token
+
+↓
+
 2. Create Booking
-          
-3. Get Booking By ID
-          
+
+↓
+
+3. Get Booking
+
+↓
+
 4. Update Booking
-          
+
+↓
+
 5. Delete Booking
 ```
 
@@ -187,28 +239,32 @@ The complete API test flow:
 
 ## Assertions
 
-Each API scenario includes validation of:
+Each step validates:
 
 - HTTP status code
 - Response headers
 - Response body
+- Authentication token
+- Booking ID
+- Returned booking data
 
-The tests verify that API responses match the expected behavior.
+The test ensures that every API response matches the expected behavior throughout the complete booking lifecycle.
 
 ---
 
 ## Development Process
 
-1. API endpoints were explored using Restful Booker API documentation.
-2. Requests were validated and debugged using Postman.
-3. API scenarios were automated using JavaScript Fetch API.
-4. Assertions were added to validate API responses.
-5. Tests can be executed from the command line using npm scripts.
+1. Explored the Restful Booker API documentation.
+2. Validated requests using Postman.
+3. Designed reusable API methods following the Atomic Test Design approach.
+4. Automated the complete booking workflow using Playwright.
+5. Added assertions for every API response.
+6. Executed the tests using the Playwright Test Runner.
 
 ---
 
 ## Notes
 
-Postman was used only for API request validation and debugging.
+Postman was used only during the initial API exploration and request validation.
 
-The final automated tests were implemented using native JavaScript Fetch API without additional API testing frameworks.
+The final automated solution was implemented using Playwright's built-in API testing capabilities and follows the Atomic Test Design approach to keep the test code modular and reusable.
