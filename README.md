@@ -18,6 +18,10 @@ The purpose of this project is to verify the complete REST API booking lifecycle
 
 ---
 
+## Development
+
+This project uses ESLint to detect suspicious code in JavaScript files. Visit https://eslint.org for details.
+
 ## Technologies
 
 - JavaScript (ES Modules)
